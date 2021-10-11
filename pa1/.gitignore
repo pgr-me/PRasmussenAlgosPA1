@@ -1,3 +1,6 @@
+# Temporary VIM files
+*.un~
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
