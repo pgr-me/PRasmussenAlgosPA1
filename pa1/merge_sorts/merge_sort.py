@@ -1,4 +1,4 @@
-"""Peter Rasmussen, Programming Assignment 1, sorts/merge_sort.py
+"""Peter Rasmussen, Programming Assignment 1, merge_sorts/merge_sort.py
 
 This module implements recursive versions of the two-way, three-way, and four-way straight merges and the natural merge.
 
