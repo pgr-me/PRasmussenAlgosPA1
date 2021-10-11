@@ -1,7 +1,8 @@
-"""Peter Rasmussen, Lab 4, sorts/merge_sort.py
+"""Peter Rasmussen, Programming Assignment 1, merge_sorts/merge_sort.py
 
-This module implements recursive versions of the two-way, three-way, and four-way straight merges
-and the natural merge.
+This module implements recursive versions of the two-way, three-way, and four-way straight merges and the natural merge.
+
+I originally wrote this module for Lab 4 of my Spring 2021 Data Structures course.
 
 """
 
