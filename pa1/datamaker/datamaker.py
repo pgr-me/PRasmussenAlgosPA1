@@ -1,92 +1,68 @@
-"""Peter Rasmussen, Lab 4, datamaker/datamaker.py
+#!/usr/bin/env python3
+"""Peter Rasmussen, Programming Assignment 1, datamaker/datamaker.py
 
-This module provides the DataMaker class, which we use to create in-order, randomly-ordered,
-and reverse-ordered datasets of varying sizes. For each of these order types, the user can specify
-the fraction of duplicates present in each output dataset.
+This module provides the DataMaker class, which we use to create a random sequence of X-Y pairs (points)..
 
 """
 
 
 # Standard library imports
-from typing import Union
+from typing import List
 
 # Local imports
 from lab4.lists import OrderedList
 
 
+
 class DataMaker:
-    """Makes in-order (asc), reverse-ordered (rev), and randomly ordered (ran) datasets."""
-    def __init__(self, size: int, dup_frac):
+    """
+    This class generates pairs of pseudo-random numbers using the linear congruential generator algorithm.
+    Sources:
+    Parameters based on https://en.wikipedia.org/wiki/Linear_congruential_generator
+    make_pseudo_random method adapted from https://stackoverflow.com/questions/3062746/special-simple-random-number-generator 
+    """
+    def __init__(self, n, seed=777, a=1103515245, c=12345, m=2**15):
         """
-        Initialize size and duplicate fraction parameters and list variables.
-        :param size:
-        :param dup_frac:
+        Constructor.
+        :param n: Number of pairs to generate
+        :param seed: Seed of pseudo-random sequence
+        :param a: Multiplier
+        :param c: Increment
+        :param m: Modulus
         """
-        self.size = size
-        self.dup_frac = dup_frac
-
-        # Initialize list variables
-        self.asc: Union[OrderedList, None] = None
-        self.rev: Union[OrderedList, None] = None
-        self.ran: Union[OrderedList, None] = None
-        self.dup: Union[OrderedList, None] = None
-
-    def __repr__(self):
-        return self.__str__()
-
-    def __str__(self):
-        return f"DataMaker object: Size {self.size}"
-
-    def make_lists(self):
+        self.n = n
+        self.seed = seed
+        self.a = a
+        self.c = c
+        self.m = m
+ 
+    def make_data(self)->List[list]:
         """
-        Make one in-ordered, reverse-ordered, and randomly ordered list each.
-        :return: None
+        Make a sequence of pseudo-random x-y pairs.
+        :return: List of x-y pairs
         """
-        self.asc = self.make_asc_order_list(self.size)
-
-        self.rev = self.make_asc_order_list(self.size)
-        self.rev.reverse()
-
-        self.ran = self.make_asc_order_list(self.size)
-        self.ran.randomize()
-
-        self.dup = self.make_asc_order_list(self.size, dup_frac=self.dup_frac)
-        self.dup.randomize()
-
-    @staticmethod
-    def make_asc_order_list(size: int, dup_frac: float = 0) -> OrderedList:
-        """
-        Make asc_order list.
-        :param size: Size of list to create
-        :param dup_frac: Fraction of duplicate elements
-        :return: Ordered list of elements from 1 to size
-        """
-        li = OrderedList(size, dup_frac=dup_frac)
-        counter = 0
-        while counter < size:
-            li.append(counter + 1)
-            counter += 1
-        if dup_frac > 0:
-            li.duplicate()
-        return li
+        points = []
+        seed = self.seed
+        for i in range(self.n):
+            temp = []
+            seed = self.make_pseudo_random(self.a, self.c, self.m, seed)
+            temp.append(seed)
+            seed = self.make_pseudo_random(a, c, m, seed)
+            temp.append(seed)
+            points.append(temp)
+        self.points = points
+        return self.points
 
     @staticmethod
-    def make_ran_order_list(li: OrderedList) -> OrderedList:
+    def make_pseudo_random(a: int, c: int, m: int, seed: int)->int:
         """
-        Make randomly ordered list.
-        :param li: OrderedList to randomize
-        :return: Randomized list
+        Make a pseudo-random sequence of x-y pairs.
+        :param a: Multiplier
+        :param c: Increment
+        :param m: Modulus
+        :param seed: Seed to initiate pseudo-random sequence
+        :return: Pseudo-random number
         """
-        li.randomize()
-        return li
+        return (a * seed + c) % m
 
-    @staticmethod
-    def make_rev_order_list(li: OrderedList):
-        """
-        Make reverse-ordered list.
-        :param li: OrderedList to reverse order for
-        :return: Reverse-ordered list
-        """
-        print(type(li))
-        li.reverse()
-        return li
+dm = DataMaker(10000)
