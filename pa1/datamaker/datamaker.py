@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Peter Rasmussen, Programming Assignment 1, datamaker/datamaker.py
 
-This module provides the DataMaker class, which we use to create a random sequence of X-Y pairs (points)..
+The DataMaker class creates a random sequence of X-Y pairs (points)..
 
 """
 
