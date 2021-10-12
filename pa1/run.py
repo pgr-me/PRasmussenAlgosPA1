@@ -9,34 +9,62 @@ recursive sorting algorithms, and an output CSV for each input file.
 import csv
 from copy import deepcopy
 from pathlib import Path
-from time import time_ns
+from typing import List
 
 # local imports
-from pa1.datamaker.make_data import make_data
-from pa1.file_io import
-from pa1.sorts import HeapSort
-from pa1.sorts import MergeSort
+from pa1.datamaker import DataMaker
+from pa1.distance_computer import DistanceComputer
+from pa1.file_io import read_input_params
+from pa1.sorts.merge_sort_points import MergeSortPoints
 
 
 def run(
-        in_path: Path,
-        out_path: Path,
-        datamaker_out_path: Path,
+        src: Path,
+        dst_dir: Path,
+        seed: int,
         file_header: str
 ):
     """
     Symbolically combine polynomials and then evaluate for various evaluation sets.
-    :param in_path: Data input path or directory
-    :param out_path: Data output CSV path or directory where CSVs will be saved
-    :param file_header: Header to add to top of CSV
+    :param src: Data input path or directory
+    :param dst_dir: Data output CSV path or directory where CSVs will be saved
+    :param seed: Random number seed
+    :param file_header: Header to add to top of output CSV
     """
 
-    program_start = time_ns()
-    in_data =
-    for m,
+    # Read data check, among other things, that m <= n
+    input_params: dict = read_input_params(src)
+
+    # Iterate over each n, m pair
+    for n, m in input_params.items():
+
+        # Generate sequence of randomly dispersed points
+        data_maker = DataMaker(n, seed=seed)
+        P: List[list] = data_maker.make_data()
+
+        # Compute distances among points
+        distance_computer = DistanceComputer(P)
+        distances: List[dict] = distance_computer.compute_distances()
+
+        # Sort points
+        merge_sort_points = MergeSortPoints(distances)
+        P_sorted = merge_sort_points.sort()
+
+        # Select nearest m pairs
+        P_selected = P_sorted[:m]
+
+        # Process outputs
 
 
-        file_io = FileIO(in_path, out_path)
+
+
+
+        # Compute distances
+
+
+
+
+        file_io = FileIO(src, dst_dir)
         datasets = file_io.read_input()
         if len(datasets) == 0:
             raise ValueError("No files were read.")
@@ -72,7 +100,7 @@ def run(
 
             # Make file headers
             operation_message = "Unsorted and sorted lists and sorted list performance metrics."
-            in_file = in_path / f"{dst.stem}.dat"
+            in_file = src / f"{dst.stem}.dat"
             file_header_ = make_header(file_header, in_file, dst, operation_message)
 
             # Make column names

@@ -11,6 +11,7 @@ from typing import List
 # Local imports
 from merge_sort import MergeSort
 
+
 class MergeSortPoints(MergeSort):
     def __init__(self, unsorted_li: List[dict]):
         super().__init__(unsorted_li)
@@ -32,4 +33,3 @@ class MergeSortPoints(MergeSort):
             self.n_comparisons += 1
 
         return li_merge + l1 + l2
-

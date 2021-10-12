@@ -34,10 +34,10 @@ sys.setrecursionlimit(16000)
 # Parse arguments
 parser = argparse.ArgumentParser(prog="lab4 scratch")
 parser.add_argument(
-    "--in_path", "-i", type=Path, help="Input file or directory path"
+    "--src", "-i", type=Path, help="Input file or directory path"
 )
 parser.add_argument(
-    "--out_path", "-o", type=Path, help="Output file or directory path"
+    "--dst_dir", "-o", type=Path, help="Output file or directory path"
 )
 parser.add_argument(
     "--test_out_path", "-to", type=Path, help="Test output file path"

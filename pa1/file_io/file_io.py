@@ -13,7 +13,7 @@ class ReadDatasetError(Exception):
     pass
 
 
-def read_dataset(in_file: Union[str, Path]) -> dict:
+def read_input_params(in_file: Union[str, Path]) -> dict:
     """
     Read integers from file input and append them to a list.
     in_file: Input file to read
@@ -43,7 +43,7 @@ def read_dataset(in_file: Union[str, Path]) -> dict:
         if line == 1:
             if (n != "n") or (m != "m"):
                 print(n, m)
-                msg = f"{in_file}, line 1: must have a header row that inludes `n` & `m` as its 1st & 2nd columns."
+                msg = f"{in_file}, line 1: Header row must include `n` & `m` as its 1st & 2nd cols."
                 raise ReadDatasetError(msg)
             else:
                 continue
