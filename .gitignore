@@ -1,6 +1,9 @@
 # Temporary VIM files
 *.un~
 
+# Mac files
+.DS_Store
+
 # PyCharm extension
 .idea/
 
