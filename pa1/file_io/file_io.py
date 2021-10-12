@@ -4,6 +4,7 @@ This module reads an input file and organizes its contents into a dictionary of 
 """
 
 # standard library imports
+from collections import OrderedDict
 from pathlib import Path
 from typing import Union
 
@@ -12,68 +13,63 @@ class ReadDatasetError(Exception):
     pass
 
 
-class FileIO:
-    """Handles reading inputs and writing outputs."""
+def read_dataset(in_file: Union[str, Path]) -> dict:
+    """
+    Read integers from file input and append them to a list.
+    in_file: Input file to read
+    :return: List populated with data
+    """
+    # Convert in_file to Path object if string
+    in_file = Path(in_file)
 
-    def __init__(self, in_path: Path, out_path: Path):
-        self.in_path = Path(in_path)
-        self.out_path = Path(out_path)
+    # Check that in_file exists
+    if not in_file.exists():
+        raise FileNotFoundError(f"Input file {in_file} does not exist.")
 
-    def read_datasets(self, in_dir: Union[str, Path]) -> dict:
-        """
-        Read each dataset from a directory and each to a dictionary keyed on filename.
-        :param in_dir: Directory that houses input files
-        :return: Dictionary of datasets
-        e.g., d = {'asc50': li_1, ..., 'dup10k': li_n}
-        """
-        d = {}
-        for src in Path(in_dir).iterdir():
-            d.update(self.read_dataset(src))
-        return d
+    # Read in_file data
+    with open(str(in_file), "r") as f:
+        rows = f.readlines()
 
-    def read_input(self) -> dict:
-        """
-        Read a file or directory and return a dictionary of one or more datasets.
-        :return: Dictionary of one or more datasets keyed on file stem
-        """
-        if self.in_path.is_file():
-            return self.read_dataset(self.in_path)
-        elif self.in_path.is_dir():
-            return self.read_datasets(self.in_path)
-        else:
-            raise ReadDatasetError("File or directory does not exist.")
+    # Iterate over each row and process n and m
+    in_data = OrderedDict()
+    line = 0
+    for row in rows:
+        line += 1
+        n, m = row.split(",")[:2]
+        n = n.replace("\ufeff", "")
+        m = m.replace("\n", "")
 
-    def write_output(self, output_dict: dict):
-        """
-        Write a file or a set of files to a directory.
-        :return: None
-        """
-        pass
+        # Test if header columns are `n` and `m`, in that order
+        if line == 1:
+            if (n != "n") or (m != "m"):
+                print(n, m)
+                msg = f"{in_file}, line 1: must have a header row that inludes `n` & `m` as its 1st & 2nd columns."
+                raise ReadDatasetError(msg)
+            else:
+                continue
 
-    def create_out_filename(self, dataset_key: str) -> Path:
-        """
-        Create output filename.
-        :param dataset_key: Name of dataset (e.g., ran1k)
-        :return: File path
-        If self.out_path is a directory, the dataset_key (e.g., asc1k) is used to create output name
-        """
-        if self.out_path.is_dir():
-            return self.out_path / f"{dataset_key}.csv"
-        return self.out_path
+        # Test if n and m values are non-negative integers
+        if (not n.isdigit()) or (not m.isdigit()):
+            msg = f"{in_file}, line {line}: n={n} and m={m} must be non-negative integers."
+            raise ValueError(msg)
 
-    @staticmethod
-    def read_dataset(in_file: Union[str, Path]) -> dict:
-        """
-        Read integers from file input and append them to a list.
-        in_file: Input file to read
-        :return: List populated with data
-        """
-        if not in_file.is_file():
-            raise ReadDatasetError(f"Input file {in_file} does not exist.")
-        with open(str(in_file), "r") as f:
-            dataset = [int(x) for x in f.readlines()]
-        li = []
-        for integer in dataset:
-            li.append(integer)
+        # Convert n and m from strings to integers so we can complete the tests
+        n, m = int(n), int(m)
 
-        return {in_file.stem: li}
+        # Test if m <= n
+        if m > n:
+            msg = f"{in_file}, line {line}: m is {m} but must be less than or equal to n {n}."
+            raise ValueError(msg)
+
+        # Test if n > 1
+        if n < 2:
+            raise ValueError(f"{in_file}, line {line}: n is {n} but must be greater than 1.")
+
+        # Test if m > 0
+        if m < 1:
+            raise ValueError(f"{in_file}, line {line}: m is {m} but must be greater than 0.")
+
+        # Populate ordered dictionary
+        in_data[n] = m
+
+    return in_data

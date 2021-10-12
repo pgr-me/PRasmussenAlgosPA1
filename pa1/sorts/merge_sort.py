@@ -1,8 +1,10 @@
-"""Peter Rasmussen, Programming Assignment 1, merge_sorts/merge_sort.py
+#!/usr/bin/env python3
+"""Peter Rasmussen, Programming Assignment 1, sorts/merge_sort.py
 
 This module implements recursive versions of the two-way, three-way, and four-way straight merges and the natural merge.
 
-I originally wrote this module for Lab 4 of my Spring 2021 Data Structures course.
+I originally wrote this module for Lab 4 of my Spring 2021 Data Structures course. The
+MergeSortPoints class inherits from MergeSort.
 
 """
 

@@ -1,4 +1,4 @@
-"""Peter Rasmussen, Programming Assignment 1, merge_sorts/merge_sort.py
+"""Peter Rasmussen, Programming Assignment 1, sorts/merge_sort.py
 
 The MergeSortPoints class sorts a list of x-y points and inherits from the MergeSort class.
 

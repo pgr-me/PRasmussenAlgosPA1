@@ -6,4 +6,4 @@ other scripts when the module is imported."
 """
 
 
-from lab4.run import run
+from pa1.run import run

@@ -48,7 +48,7 @@ parser.add_argument(
 parser.add_argument(
     "--file_header",
     "-f",
-    default="Peter Rasmussen: Lab 4",
+    default="Peter Rasmussen: Programming Assignment 1",
     type=str,
     help="Specify file header",
 )

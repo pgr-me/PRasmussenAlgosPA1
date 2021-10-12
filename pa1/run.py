@@ -12,10 +12,10 @@ from pathlib import Path
 from time import time_ns
 
 # local imports
-from lab4.datamaker.make_data import make_data
-from lab4.file_io import FileIO, make_header
-from lab4.sorts import HeapSort
-from lab4.sorts import MergeSort
+from pa1.datamaker.make_data import make_data
+from pa1.file_io import
+from pa1.sorts import HeapSort
+from pa1.sorts import MergeSort
 
 
 def run(
@@ -28,22 +28,13 @@ def run(
     Symbolically combine polynomials and then evaluate for various evaluation sets.
     :param in_path: Data input path or directory
     :param out_path: Data output CSV path or directory where CSVs will be saved
-    :param datamaker_out_path: Datamaker output directory
     :param file_header: Header to add to top of CSV
     """
 
     program_start = time_ns()
+    in_data =
+    for m,
 
-    if datamaker_out_path is not None:
-        make_data(datamaker_out_path)
-
-    else:
-        sorters = {"heap_sort": {"sort_class": HeapSort, "kwargs": {}},
-                   "two_way_merge": {"sort_class": MergeSort, "kwargs": {"way": 2}},
-                   "three_way_merge": {"sort_class": MergeSort, "kwargs": {"way": 3}},
-                   "four_way_merge": {"sort_class": MergeSort, "kwargs": {"way": 4}},
-                   "natural_merge": {"sort_class": MergeSort, "kwargs": {"way": "natural"}},
-                   }
 
         file_io = FileIO(in_path, out_path)
         datasets = file_io.read_input()

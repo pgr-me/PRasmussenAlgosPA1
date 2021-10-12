@@ -1,6 +1,12 @@
 # Temporary VIM files
 *.un~
 
+# Mac files
+.DS_Store
+
+# PyCharm extension
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
