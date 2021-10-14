@@ -1,120 +1,85 @@
-"""Peter Rasmussen, Lab 4, run.py
+"""Peter Rasmussen, Programming Assignment 1, run.py
 
-This module processes a reads a file or directory of files containing integers, executes five
-recursive sorting algorithms, and an output CSV for each input file.
+The run function reads a file of one or more n-m combinations, produces a random
+uniform distribution of 2D points, computes the distances between each pair of points, sorts the
+point pairs in ascending order by distance, and saves statistical and closest pairs outputs to the
+selected destination directory.
 
 """
 
 # standard library imports
 import csv
-from copy import deepcopy
+import json
+import logging
+import os
 from pathlib import Path
-from time import time_ns
+from typing import List, Union
 
 # local imports
-from pa1.datamaker.make_data import make_data
-from pa1.file_io import
-from pa1.sorts import HeapSort
-from pa1.sorts import MergeSort
+from pa1.datamaker import DataMaker
+from pa1.distance_computer import DistanceComputer
+from pa1.file_io import read_input_params, write_stats_outputs, write_closest_pairs_outputs
+from pa1.sorts import HeapSortPoints
 
 
 def run(
-        in_path: Path,
-        out_path: Path,
-        datamaker_out_path: Path,
-        file_header: str
-):
+        src: Path,
+        dst_dir: Path,
+        seed: int,
+        file_header: str):
     """
     Symbolically combine polynomials and then evaluate for various evaluation sets.
-    :param in_path: Data input path or directory
-    :param out_path: Data output CSV path or directory where CSVs will be saved
-    :param file_header: Header to add to top of CSV
+    :param src: Input CSV path
+    :param dst_dir: Output directory
+    :param seed: Random number seed
+    :param file_header: Header to add to top of output CSV
     """
+    dir_path = Path(os.path.dirname(os.path.realpath(__file__)))
+    log_path = dir_path / "pa1.log"
+    logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
-    program_start = time_ns()
-    in_data =
-    for m,
+    logging.debug("Read data and check, among other things, that m <= n")
+    input_params: List[List[Union[int, float]]] = read_input_params(src)
 
+    logging.debug("Iterate over each n, m pair")
+    stats_output = [["n", "m", "n_dist_comps", "n_heapifies", "total_ops"]]
+    closest_pairs_output = []
+    for row in input_params:
+        n, m = row
+        print(f"n={n}, m={m}")
 
-        file_io = FileIO(in_path, out_path)
-        datasets = file_io.read_input()
-        if len(datasets) == 0:
-            raise ValueError("No files were read.")
+        # Generate sequence of randomly dispersed points
+        data_maker = DataMaker(n, seed=seed)
+        points: List[List[Union[int, float]]] = data_maker.make_data()
 
-        # Metrics table: Add number of comparisons, exchanges, and partition calls
-        metrics_table = [
-            ["presort_n", "presort", "n", "metric", "unsorted", "heap_sort", "two_way_merge", "three_way_merge",
-             "four_way_merge", "natural_merge"]]
+        # Compute distances among points
+        distance_computer = DistanceComputer(points)
+        points = distance_computer.compute_distances()
 
-        # Iterate over each dataset
-        for dataset_name, dataset in datasets.items():
-            print(f"Dataset: {dataset_name}")
-            data_dict = {"unsorted": dataset}
+        # Sort points
+        heap_sort_points = HeapSortPoints(points)
+        points = heap_sort_points.sort()
 
-            # Iterate over each sorter (e.g., 2-way merge sort, natural merge, etc.)
-            for sort_name, sorter_di in sorters.items():
-                print(f"\tSort: {sort_name}")
-                # Extract dictionary arguments, instantiate sorter, and sort list
-                sorter_class, kwargs = sorter_di["sort_class"], sorter_di["kwargs"]
-                sorter = sorter_class(deepcopy(dataset), **kwargs)
-                sorter.sort()
+        # Select nearest m pairs
+        m_closest_pairs = points[:m]
 
-                # Build temp dictionary and add outputs
-                data_dict[sort_name] = {"sorted": sorter.sorted_li,
-                                        "n": sorter.n,
-                                        "n_comparisons": sorter.n_comparisons,
-                                        "n_exchanges": sorter.n_exchanges,
-                                        "n_partition_calls": sorter.n_partition_calls,
-                                        "elapsed_ns": sorter.elapsed}
+        # Compute total number of operations
+        total_ops = distance_computer.n_dist_comps + heap_sort_points.n_heapifies
 
-            # Make destination filepath
-            dst = file_io.create_out_filename(dataset_name)
+        # Organize outputs
+        di = {"n": n, "m": m, "m_closest_pairs": m_closest_pairs, "all_points": data_maker.points}
+        closest_pairs_output.append(di)
 
-            # Make file headers
-            operation_message = "Unsorted and sorted lists and sorted list performance metrics."
-            in_file = in_path / f"{dst.stem}.dat"
-            file_header_ = make_header(file_header, in_file, dst, operation_message)
+        # Append current run to output list of runs
+        li = [n, m, distance_computer.n_dist_comps, heap_sort_points.n_heapifies, total_ops]
+        stats_output.append(li)
 
-            # Make column names
-            column_names: list = list(data_dict.keys())
+    logging.debug("Write performance outputs to CSV.")
+    stats_dst = dst_dir / f"{src.stem}_output.csv"
+    write_stats_outputs(stats_dst, file_header, stats_output)
 
-            # Create metrics table
-            csv_li: list = [["metric"] + column_names]
+    logging.debug("Write set of m closest pairs for given n to JSON.")
+    closest_pairs_dst = dst_dir / f"{src.stem}_output.json"
+    write_closest_pairs_outputs(closest_pairs_dst, closest_pairs_output)
 
-            # Metrics table: Add number of comparisons, exchanges, and partition calls
-            for metric in ["n", "n_comparisons", "n_exchanges", "n_partition_calls", "elapsed_ns"]:
-                li = [di[metric] for k, di in data_dict.items() if k != "unsorted"]
-                if metric == "n":
-                    metric_li = [metric, len(dataset)] + li
-                else:
-                    metric_li = [metric, "N/A"] + li
-                csv_li.append(metric_li)
-                metrics_table.append([dataset_name, dataset_name[:3], len(dataset)] + metric_li)
-
-            csv_li.append([""] + len(column_names) * [""])  # blank line to separate tables
-
-            # Create data table
-            csv_li.append(["ix"] + column_names)
-            counter = 0
-            for ix, value in enumerate(data_dict["unsorted"]):
-                li = [ix, value] + [sort_dict["sorted"][ix] for sort_name, sort_dict in
-                                    data_dict.items() if sort_name != "unsorted"]
-                csv_li.append(li)
-                counter += 1
-
-                # We don't need to write all the rows
-                if counter >= 50:
-                    break
-
-            # Write outputs to CSV
-            with open(str(dst), "w") as f:
-                f.write(file_header_)
-                writer = csv.writer(f)
-                writer.writerows(csv_li)
-
-        # Write standalone metrics table to file (for bulk processing only)
-        metrics_table_dst = dst.parents[0] / "metrics_summary.csv"
-        with open(str(metrics_table_dst), "w") as f:
-            f.write(file_header + "\n")
-            writer = csv.writer(f)
-            writer.writerows(metrics_table)
+    logging.debug("Finish.")

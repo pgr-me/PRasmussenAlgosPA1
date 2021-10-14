@@ -22,9 +22,9 @@ class DistanceComputer:
         """
         self.raw_points = raw_points
         self.distances: Union[List[dict], None] = None
-        self.n_distance_computations: int = 0
+        self.n_dist_comps: int = 0
 
-    def compute_distances(self) -> List[dict]:
+    def compute_distances(self) -> List[List[Union[int, float]]]:
         """
         Compute distances among coordinate pairs.
         :return: Distance among coordinate pairs.
@@ -33,10 +33,9 @@ class DistanceComputer:
         for i in range(len(self.raw_points)):
             for j in range(i + 1, len(self.raw_points)):
                 distance = self.compute_distance(self.raw_points[i], self.raw_points[j])
-                di = {"point1": self.raw_points[i], "point2": self.raw_points[j],
-                      "distance": distance}
-                self.distances.append(di)
-                self.n_distance_computations += 1
+                li = [self.raw_points[i], self.raw_points[j], distance]
+                self.distances.append(li)
+                self.n_dist_comps += 1
         return self.distances
 
     @staticmethod
