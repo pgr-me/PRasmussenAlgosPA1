@@ -5,8 +5,9 @@ This module reads an input file and organizes its contents into a dictionary of 
 
 # standard library imports
 from collections import OrderedDict
+import csv
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 
 class ReadDatasetError(Exception):
@@ -73,3 +74,27 @@ def read_input_params(in_file: Union[str, Path]) -> dict:
         in_data[n] = m
 
     return in_data
+
+
+def write_stats_outputs(dst: Path, file_header: str, stats_output: List[List]):
+    """
+    Write statistical outputs.
+    :param dst: CSV path
+    :param file_header: CSV header
+    :param stats_output: List of lists
+    :return:
+    """
+    with open(dst, "w") as f:
+        f.write(file_header)
+        writer = csv.writer(f)
+        writer.writerows(stats_output)
+
+
+def write_closest_pairs_outputs(dst: Path, closest_pairs_output: dict):
+    """
+    Write closest pairs output: The m-closest pairs along with all n original points included
+    :param dst: JSON path
+    :param closest_pairs_output: Includes n, m, m-closest pairs, and original set of points
+    """
+    with open(dst, "w") as f:
+        json.dump(closest_pairs_output, f)

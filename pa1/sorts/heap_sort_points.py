@@ -1,6 +1,6 @@
-"""Peter Rasmussen, Programming Assignment 1, sorts/merge_sort.py
+"""Peter Rasmussen, Programming Assignment 1, sorts/heap_sort.py
 
-The MergeSortPoints class sorts a list of x-y points and inherits from the MergeSort class.
+The HeapSortPoints class sorts a list of x-y points and inherits from the HeapSort class.
 
 """
 
@@ -9,12 +9,13 @@ from copy import deepcopy
 from typing import List
 
 # Local imports
-from merge_sort import MergeSort
+from pa1.sorts.heap_sort import HeapSort
 
 
-class MergeSortPoints(MergeSort):
+class HeapSortPoints(HeapSort):
     def __init__(self, unsorted_li: List[dict]):
         super().__init__(unsorted_li)
+        self.n_total_operations = 0
 
     def two_way_merge(self, l1: list, l2: list):
         """
@@ -33,3 +34,7 @@ class MergeSortPoints(MergeSort):
             self.n_comparisons += 1
 
         return li_merge + l1 + l2
+
+    def compute_total_operations(self):
+        self.n_total_operations = self.n_comparisons + self.n_exchanges + self.n_partition_calls
+        return self.n_total_operations

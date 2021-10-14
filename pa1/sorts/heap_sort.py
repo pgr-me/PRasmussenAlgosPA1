@@ -140,6 +140,7 @@ class MergeSort:
         else:
             partitioned_li.append([unsorted_li.pop(0)])
             self.n_partition_calls += 1
+            # add memoization
             return self.partition(unsorted_li, partitioned_li)
 
     def four_way_merge(self, l1: list, l2: list, l3: list, l4: list) -> list:
