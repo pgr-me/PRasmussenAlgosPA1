@@ -25,25 +25,22 @@ from pathlib import Path
 import sys
 
 # local imports
-from lab4.run import run
+from pa1.run import run
 
 
 sys.setrecursionlimit(16000)
 
 
 # Parse arguments
-parser = argparse.ArgumentParser(prog="lab4 scratch")
+parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--src", "-i", type=Path, help="Input file or directory path"
+    "--src", "-i", type=Path, help="Input file"
 )
 parser.add_argument(
-    "--dst_dir", "-o", type=Path, help="Output file or directory path"
+    "--dst_dir", "-o", type=Path, help="Output directory"
 )
 parser.add_argument(
-    "--test_out_path", "-to", type=Path, help="Test output file path"
-)
-parser.add_argument(
-    "--datamaker_out_path", "-do", type=Path, help="Datamaker output directory path"
+    "--seed", "-s", default=777, type=int, help="Pseudo-random seed"
 )
 parser.add_argument(
     "--file_header",
@@ -55,8 +52,8 @@ parser.add_argument(
 args = parser.parse_args()
 
 run(
-    args.in_path,
-    args.out_path,
-    args.datamaker_out_path,
+    args.src,
+    args.dst_dir,
+    args.seed,
     args.file_header
 )

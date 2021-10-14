@@ -6,6 +6,7 @@ This module reads an input file and organizes its contents into a dictionary of 
 # standard library imports
 from collections import OrderedDict
 import csv
+import json
 from pathlib import Path
 from typing import List, Union
 
@@ -14,7 +15,7 @@ class ReadDatasetError(Exception):
     pass
 
 
-def read_input_params(in_file: Union[str, Path]) -> dict:
+def read_input_params(in_file: Union[str, Path]) -> List[List[Union[int, float]]]:
     """
     Read integers from file input and append them to a list.
     in_file: Input file to read
@@ -32,13 +33,12 @@ def read_input_params(in_file: Union[str, Path]) -> dict:
         rows = f.readlines()
 
     # Iterate over each row and process n and m
-    in_data = OrderedDict()
+    in_data = []
     line = 0
+
     for row in rows:
         line += 1
-        n, m = row.split(",")[:2]
-        n = n.replace("\ufeff", "")
-        m = m.replace("\n", "")
+        n, m = row.replace("\ufeff", "").replace("\n", "").split(",")[:2]
 
         # Test if header columns are `n` and `m`, in that order
         if line == 1:
@@ -71,7 +71,7 @@ def read_input_params(in_file: Union[str, Path]) -> dict:
             raise ValueError(f"{in_file}, line {line}: m is {m} but must be greater than 0.")
 
         # Populate ordered dictionary
-        in_data[n] = m
+        in_data.append([n, m])
 
     return in_data
 
@@ -85,12 +85,12 @@ def write_stats_outputs(dst: Path, file_header: str, stats_output: List[List]):
     :return:
     """
     with open(dst, "w") as f:
-        f.write(file_header)
+        f.write(f"# {file_header}\n")
         writer = csv.writer(f)
         writer.writerows(stats_output)
 
 
-def write_closest_pairs_outputs(dst: Path, closest_pairs_output: dict):
+def write_closest_pairs_outputs(dst: Path, closest_pairs_output: List[dict]):
     """
     Write closest pairs output: The m-closest pairs along with all n original points included
     :param dst: JSON path

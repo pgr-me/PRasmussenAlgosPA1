@@ -1,40 +1,54 @@
-"""Peter Rasmussen, Programming Assignment 1, sorts/heap_sort.py
+#!/usr/bin/env python3
+"""Peter Rasmussen, Programming Assignment 1, sorts/heap_sort_points.py
 
-The HeapSortPoints class sorts a list of x-y points and inherits from the HeapSort class.
-
+The HeapSortPoints class sorts a list of x-y points.
 """
 
 # Standard library imports
-from copy import deepcopy
-from typing import List
+from typing import List, Union
 
 # Local imports
 from pa1.sorts.heap_sort import HeapSort
 
 
 class HeapSortPoints(HeapSort):
-    def __init__(self, unsorted_li: List[dict]):
-        super().__init__(unsorted_li)
-        self.n_total_operations = 0
+    """Modification of Heap sort that sorts list of lists."""
 
-    def two_way_merge(self, l1: list, l2: list):
+    def __init__(self, li: List[List[Union[int, float]]]):
         """
-        Merge two sorted lists into one sorted list.
-        :param l1: First list
-        :param l2: Second list
-        :return: Merged, sorted list
+        Constructor.
+        :param li: Unsorted list
         """
-        li_merge = []
-        while l1 and l2:
-            if l1[0]["distance"] < l2[0]["distance"]:
-                li_merge.append(l1.pop(0))
-            else:
-                self.n_exchanges += 1
-                li_merge.append(l2.pop(0))
-            self.n_comparisons += 1
+        super().__init__(li)
+        self.li = li
 
-        return li_merge + l1 + l2
+    def max_heapify(self, i: int):
+        """
+        Max heapify a subtree, rooted at index i, of lists.
+        :param i: Index of root of subtree
+        :return: Max-heapified tree
+        """
+        l = self.left(i)
+        r = self.right(i)
+        if (l <= self.heap_size - 1) and (self.li[l][-1] > self.li[i][-1]):
+            largest = l
+        else:
+            largest = i
+        if (r <= self.heap_size - 1) and (self.li[r][-1] > self.li[largest][-1]):
+            largest = r
+        if largest != i:
+            self.li[i], self.li[largest] = self.li[largest], self.li[i]
+            return self.max_heapify(largest)
 
-    def compute_total_operations(self):
-        self.n_total_operations = self.n_comparisons + self.n_exchanges + self.n_partition_calls
-        return self.n_total_operations
+    def sort(self) -> List[list]:
+        """
+        Sort a list of lists.
+        :return: Sorted list
+        """
+        self.build_max_heap()
+        for i in reversed(range(1, self.length)):
+            self.li[0], self.li[i] = self.li[i], self.li[0]
+            self.heap_size -= 1
+            self.max_heapify(0)
+
+        return self.li
