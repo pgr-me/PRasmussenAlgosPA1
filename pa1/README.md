@@ -31,8 +31,8 @@ A summary of the command line arguments are below.
 
 Positional arguments:
 
-    -i, --in_path       Input File or Directory Pathname
-    -o, --out_path      Output File or Directory Pathname
+    -i, --src          Input File or Directory Pathname
+    -o, --dst_dir      Output File or Directory Pathname
 
 Optional arguments:
 
@@ -41,35 +41,20 @@ Optional arguments:
 
 ## Features
 
-* Four-way merge complements two-way and three-way merge sorts and heap sort
-* CSV outputs organized such that, for each input dataset, performance metrics are tabulated at the
-  top of the CSV and beneath that is a side-by-side comparison of the echoed input and the sorted
-  outputs.
-* Tested on file sizes of 10,000 integers.
-* Option to process one file at a time or in bulk.
-* Recursive implementation of each sort algorithm to enable apples-to-apples performance
-  comparisons.
-* Using the 25 input files and five sorts, the user can execute 125 runs in one go.
+* Capability to process one or more n-m combinations per run.
+* Performance metrics for each run for each algorithm: number of distance comparisons, number of
+  heapifies, and total number of operations (distance comparisons + n number of heapifies).
+* Tested on inputs of up to n=1024 and m=523,776.
+* Outputs provided as two files: 1) CSV of performance metrics and 2) JSON of echoed inputs and
+  selected outputs.
+* Control over randomization by selection of random seed.
 
 ## Input and Output Files
 
 The ```resources/inputs``` directory contains the set of input files. Pre-processed outputs are in
 the ```resources/outputs``` directory.
 
-## Pre-sorts
-This program has been tested using in-order, reverse-ordered, and randomly-ordered lists. List 
-"pre-sorts" are available in the ```resources/inputs``` directory. For each pre-sort, there are
-pre-tested file sizes of 50, 500, 1,000, 5,000, and 10,000 integers. The randomly-ordered set of
-lists includes one set without duplicates and one with 20% duplicates. The other pre-sorts -
-in-order and reverse-ordered - have zero duplicates.
-
-We use the following file prefixes to identify the list presort:
-* In-order: asc
-* Reverse-ordered: rev
-* Randomly-ordered: ran
-* Randomly-ordered (20% duplicates): dup
-
-## Example Output File
+## Example Output Files
 
 An example of the metrics portion of the output for asc5.csv is shown below.
 
