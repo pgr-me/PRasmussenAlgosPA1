@@ -3,12 +3,14 @@
 This module reads an input file and organizes its contents into a dictionary of lists.
 """
 
-# standard library imports
-from collections import OrderedDict
+# Standard library imports
 import csv
 import json
 from pathlib import Path
 from typing import List, Union
+
+# Local imports
+from pa1.utils import n_choose_k
 
 
 class ReadDatasetError(Exception):
@@ -57,9 +59,10 @@ def read_input_params(in_file: Union[str, Path]) -> List[List[Union[int, float]]
         # Convert n and m from strings to integers so we can complete the tests
         n, m = int(n), int(m)
 
-        # Test if m <= n
-        if m > n:
-            msg = f"{in_file}, line {line}: m is {m} but must be less than or equal to n {n}."
+        # Test if m <= n choose 2
+        n_choose_2 = n_choose_k(n, 2)
+        if m > n_choose_2:
+            msg = f"{in_file}, line {line}: m = {m} but must be <= to n-choose-2 = {n_choose_2}."
             raise ValueError(msg)
 
         # Test if n > 1
@@ -70,7 +73,7 @@ def read_input_params(in_file: Union[str, Path]) -> List[List[Union[int, float]]
         if m < 1:
             raise ValueError(f"{in_file}, line {line}: m is {m} but must be greater than 0.")
 
-        # Populate ordered dictionary
+        # Append n and m to list
         in_data.append([n, m])
 
     return in_data

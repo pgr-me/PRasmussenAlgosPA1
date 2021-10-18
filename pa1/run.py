@@ -8,8 +8,6 @@ selected destination directory.
 """
 
 # standard library imports
-import csv
-import json
 import logging
 import os
 from pathlib import Path
@@ -38,7 +36,7 @@ def run(
     log_path = dir_path / "pa1.log"
     logging.basicConfig(filename=log_path, level=logging.DEBUG)
 
-    logging.debug("Read data and check, among other things, that m <= n")
+    logging.debug("Read data and check, among other things, that m <= n choose 2")
     input_params: List[List[Union[int, float]]] = read_input_params(src)
 
     logging.debug("Iterate over each n, m pair")

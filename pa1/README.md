@@ -1,29 +1,30 @@
-# Peter Rasmussen, Lab 4
+# Peter Rasmussen, Programming Assignment 1
 
-This Python package sorts one or more data files using recursive implementations of straight merge,
-natural merge, and heap sort algorithms and writes outputs to CSV.
+This Python program finds the m nearest pairs of n randomly generated, two-dimensional points.
 
 ## Getting Started
 
 The package is designed to be executed as a module from the command line. The user must specify the
-input and output file paths, either as a pair of file paths or directory paths, as illustrated
-below.
+input file path and output directory as illustrated below. The PRasmussenAlgosPA1/resources
+directory provides example input and output files for the user. The
+PRasmussenAlgosPA1/resources/inputs/default.csv file provides 24 n-m combinations.
 
-To process one file, specify the input and output file paths.
 ```shell
-python -m path/to/lab4 -i path/to/in_file.dat -o path/to/out_file.csv 
-```
-
-To process a directory of data files, specify the input and output directory paths.
-```shell
-python -m path/to/lab4 -i path/to/input_dir -o path/to/output_dir
+python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ 
 ```
 
 Optionally, the user may specify a file header that is prepended to the outputs. The example below
 illustrates usage of the optional argument.
 
 ```shell
-python -m path/to/lab4 -i path/to/in_file.dat -o path/to/out_file.csv -f "Your Header"
+python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ -f "Your Header"
+```
+
+Finally, the user may specify the random seed used to generate the randomly distributed set of
+points, as the example below shows.
+
+```shell
+python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ -s 777
 ```
 
 A summary of the command line arguments are below.
@@ -99,12 +100,7 @@ The heapify and sort methods are adapted from the following source.
     Kumra, Mohit. "HeapSort". GeeksforGeeks, https://www.geeksforgeeks.org/heap-sort/.
     Accessed 23 April 2021.
 
-A memoization routine, which ultimately was not included in the final version of the program, was obtained from the following source.
-
-    Class obtained from source cited below.
-    “Python - anyone have a memoizing decorator that can handle unhashable arguments?" Stack Overflow, 26 April 2021,
-    https://stackoverflow.com/questions/4669391/python-anyone-have-a-memoizing-decorator-that-can-handle-unhashable-arguments
 
 ## Licensing
 
-This project is licensed under the MIT license.
+This project is licensed under the CC0 1.0 Universal license.
