@@ -27,7 +27,7 @@ points, as the example below shows.
 python -m path/to/pa1 -i path/to/in_file.csv -o path/to/out_dir/ -s 777
 ```
 
-A summary of the command line arguments are below.
+A summary of the command line arguments is below.
 
 Positional arguments:
 
@@ -38,6 +38,12 @@ Optional arguments:
 
     -h, --help          Show this help message and exit
     -f, --file_header   Input custom file header above output file
+    -s, --seed          Provide pseudo-random seed
+
+## Key parts of program
+* DataMaker: Class that ingests a set of n-m combinations and, using (an optionally-provided) random seed, generates a random set of points.
+* DistanceComputer: Class that computes the distance between each pair of points.
+* HeapSort: Class that sorts the points list by distance.
 
 ## Features
 
@@ -67,23 +73,15 @@ number of operations in the n, m, dist_comps, n_heapifies, and total_ops columns
 8|28|28|14|42
 16|120|120|60|180
 
-The default.JSON output echoes the randomized data made by 
-
-**ix**|**unsorted**|**heap\_sort**|**two\_way\_merge**|**three\_way\_merge**|**four\_way\_merge**|**natural\_merge**
-:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:
-0|2000|1|1|1|1|1
-1|1999|2|2|2|2|2
-2|1998|3|3|3|3|3
-3|1997|4|4|4|4|4
-4|1996|5|5|5|5|5
+The default.JSON output echoes the randomized data made by DataMaker and also presents the m-nearest
+point pairs.
 
 ## Sources
 
-The heapify and sort methods are adapted from the following source.
+The heap sort method is adapted from the following source.
     
-    Kumra, Mohit. "HeapSort". GeeksforGeeks, https://www.geeksforgeeks.org/heap-sort/.
-    Accessed 23 April 2021.
-
+    Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009). Introduction to Algorithms.
+    Cambridge: The MIT Press.
 
 ## Licensing
 
