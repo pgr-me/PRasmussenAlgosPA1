@@ -79,6 +79,16 @@ def read_input_params(in_file: Union[str, Path]) -> List[List[Union[int, float]]
     return in_data
 
 
+def write_closest_pairs_outputs(dst: Path, closest_pairs_output: List[dict]):
+    """
+    Write closest pairs output: The m-closest pairs along with all n original points included
+    :param dst: JSON path
+    :param closest_pairs_output: Includes n, m, m-closest pairs, and original set of points
+    """
+    with open(dst, "w") as f:
+        json.dump(closest_pairs_output, f)
+
+
 def write_stats_outputs(dst: Path, file_header: str, stats_output: List[List]):
     """
     Write statistical outputs.
@@ -91,13 +101,3 @@ def write_stats_outputs(dst: Path, file_header: str, stats_output: List[List]):
         f.write(f"# {file_header}\n")
         writer = csv.writer(f)
         writer.writerows(stats_output)
-
-
-def write_closest_pairs_outputs(dst: Path, closest_pairs_output: List[dict]):
-    """
-    Write closest pairs output: The m-closest pairs along with all n original points included
-    :param dst: JSON path
-    :param closest_pairs_output: Includes n, m, m-closest pairs, and original set of points
-    """
-    with open(dst, "w") as f:
-        json.dump(closest_pairs_output, f)

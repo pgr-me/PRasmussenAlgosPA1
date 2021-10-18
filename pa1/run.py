@@ -16,7 +16,7 @@ from typing import List, Union
 # local imports
 from pa1.datamaker import DataMaker
 from pa1.distance_computer import DistanceComputer
-from pa1.file_io import read_input_params, write_stats_outputs, write_closest_pairs_outputs
+from pa1.file_io import read_input_params, write_closest_pairs_outputs, write_stats_outputs
 from pa1.sorts import HeapSortPoints
 
 

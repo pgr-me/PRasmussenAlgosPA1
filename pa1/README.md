@@ -56,19 +56,18 @@ the ```resources/outputs``` directory.
 
 ## Example Output Files
 
-An example of the metrics portion of the output for asc5.csv is shown below.
+An example of the first few lines of the default.csv file is reproduced below. Each row represents a
+run. We capture n, m, the number of distance comparisons, the number of heapifies, and the total 
+number of operations in the n, m, dist_comps, n_heapifies, and total_ops columns, respectively.
 
-**metric**|**unsorted**|**heap\_sort**|**two\_way\_merge**|**three\_way\_merge**|**four\_way\_merge**|**natural\_merge**
-:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:
-n|2000|2000|2000|2000|2000|2000
-n\_comparisons|N/A|64277|10864|31060|47704|10864
-n\_exchanges|N/A|18708|14864|12162|11107|14864
-n\_partition\_calls|N/A|0|1999|1999|1999|2000
-elapsed\_ns|N/A|50141000|36241000|31427000|27518000|36522000
+**n**|**m**|**dist\_comps**|**n\_heapifies**|**total\_ops**
+:-----:|:-----:|:-----:|:-----:|:-----:
+2|1|1|0|1|
+4|6|6|3|9
+8|28|28|14|42
+16|120|120|60|180
 
-
-Beneath the metrics table is the side-by-side unsorted and sorted lists (2000-item reverse order
-list and corresponding sorts shown).
+The default.JSON output echoes the randomized data made by 
 
 **ix**|**unsorted**|**heap\_sort**|**two\_way\_merge**|**three\_way\_merge**|**four\_way\_merge**|**natural\_merge**
 :-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:
