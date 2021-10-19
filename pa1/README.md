@@ -1,6 +1,6 @@
 # Peter Rasmussen, Programming Assignment 1
 
-This Python program finds the m nearest pairs of n randomly generated, two-dimensional points.
+This Python 3 program finds the m nearest pairs of n randomly generated, two-dimensional points.
 
 ## Getting Started
 

@@ -34,7 +34,10 @@ def run(
     """
     dir_path = Path(os.path.dirname(os.path.realpath(__file__)))
     log_path = dir_path / "pa1.log"
-    logging.basicConfig(filename=log_path, level=logging.DEBUG)
+    log_format = "%(asctime)s - %(levelname)s - %(message)s"
+    logging.basicConfig(filename=log_path, level=logging.DEBUG, format=log_format)
+
+    logging.debug(f"Begin run: src={src.name}, dst_dir={dst_dir.name}, seed={seed}")
 
     logging.debug("Read data and check, among other things, that m <= n choose 2")
     input_params: List[List[Union[int, float]]] = read_input_params(src)
@@ -44,7 +47,7 @@ def run(
     closest_pairs_output = []
     for row in input_params:
         n, m = row
-        print(f"n={n}, m={m}")
+        logging.info(f"n={n}, m={m}")
 
         # Generate sequence of randomly dispersed points
         data_maker = DataMaker(n, seed=seed)
@@ -80,4 +83,4 @@ def run(
     closest_pairs_dst = dst_dir / f"{src.stem}_output.json"
     write_closest_pairs_outputs(closest_pairs_dst, closest_pairs_output)
 
-    logging.debug("Finish.")
+    logging.debug("Finish.\n")
