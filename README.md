@@ -1,13 +1,16 @@
-# Peter Rasmussen, Lab 4
+# Peter Rasmussen, Programming Assignment 1
 
-This ```README``` serves as an informational entry point into the Python module lab4. **Please note
-a more detailed, module-level ```README``` is available in the lab/ directory. This README provides
-information about how to run the program, features of the modules, inputs and outputs, an example
-output file, and licensing.**
+This ```README``` serves as an informational entry point into the Python module pa1. **Please note
+a more detailed, module-level ```README``` is available in the ```pa1/``` directory. The more
+detailed README provides information about how to run the program, features of the modules, inputs
+and outputs, an example output file, and licensing.**
 
 ## Lab Structure
 
-* ```lab4/```: Python module uses five sorting methods to sort files of integers.
-* ```analysis/```: PDF of an analysis of various aspects of the Python module.
-* ```resources/```: Required and additional datasets; each input has its correspondingly-named
-  output.
+* ```pa1/``` Python module selects the m nearest point pairs among a list of n randomly distributed
+  points.
+* ```analysis/``` PDF of pseudo code of the algorithms used by the ```pa1``` module plus analysis
+  of runtime complexity and a comparison between the pseudo code and the implemented algorithms.
+* ```resources/``` Provides default and test datasets; each input has its correspondingly-named
+  output. Inputs and outputs are organized in ```resources/inputs/``` and ```resources/outputs/```, 
+  respectively.

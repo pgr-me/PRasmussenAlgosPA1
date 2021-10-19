@@ -38,14 +38,14 @@ class HeapSort:
         Max heapify a subtree rooted at index i.
         :param i: Index of root of subtree
         """
-        l = self.left(i)
-        r = self.right(i)
-        if (l <= self.heap_size - 1) and (self.li[l] > self.li[i]):
-            largest = l
+        left = self.left(i)
+        right = self.right(i)
+        if (left <= self.heap_size - 1) and (self.li[left] > self.li[i]):
+            largest = left
         else:
             largest = i
-        if (r <= self.heap_size - 1) and (self.li[r] > self.li[largest]):
-            largest = r
+        if (right <= self.heap_size - 1) and (self.li[right] > self.li[largest]):
+            largest = right
         if largest != i:
             self.li[i], self.li[largest] = self.li[largest], self.li[i]
             self.n_heapifies += 1
